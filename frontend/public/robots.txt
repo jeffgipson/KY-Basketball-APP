@@ -1,0 +1,5 @@
+User-agent: *
+# Set VITE_ENABLE_INDEXING=true in your .env to allow indexing
+Disallow: /
+
+Sitemap: https://khsbhof.pages.dev/sitemap.xml

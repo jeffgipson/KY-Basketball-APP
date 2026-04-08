@@ -1,0 +1,111 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --color-navy: #0A1628;
+    --color-gold: #C9993A;
+    --color-gold-light: #E4BC59;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-navy text-white font-sans antialiased;
+    min-height: 100vh;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-serif;
+  }
+
+  ::selection {
+    background: rgba(201, 153, 58, 0.3);
+    color: #fff;
+  }
+
+  /* Custom scrollbar */
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  ::-webkit-scrollbar-track {
+    background: #0A1628;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: rgba(201, 153, 58, 0.4);
+    border-radius: 3px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: rgba(201, 153, 58, 0.7);
+  }
+}
+
+@layer components {
+  .btn-primary {
+    @apply bg-gold hover:bg-gold-400 text-navy font-semibold px-6 py-3 rounded-sm transition-all duration-200 hover:shadow-lg hover:shadow-gold-500/20 active:scale-95;
+  }
+
+  .btn-secondary {
+    @apply border border-gold/40 hover:border-gold text-gold hover:bg-gold/10 font-semibold px-6 py-3 rounded-sm transition-all duration-200;
+  }
+
+  .btn-ghost {
+    @apply text-white/70 hover:text-white hover:bg-white/10 px-4 py-2 rounded-sm transition-all duration-200;
+  }
+
+  .card {
+    @apply bg-navy-600/50 border border-white/10 rounded-sm backdrop-blur-sm;
+  }
+
+  .gold-rule {
+    @apply border-t border-gold/30;
+  }
+
+  .section-title {
+    @apply font-serif text-3xl md:text-4xl font-bold text-white;
+  }
+
+  .section-subtitle {
+    @apply text-gold font-semibold text-sm uppercase tracking-widest;
+  }
+
+  /* Animated gold underline for active nav items */
+  .nav-link {
+    @apply relative text-white/70 hover:text-white transition-colors duration-200 py-1;
+  }
+  .nav-link::after {
+    content: '';
+    @apply absolute bottom-0 left-0 w-0 h-0.5 bg-gold transition-all duration-300;
+  }
+  .nav-link:hover::after,
+  .nav-link.active::after {
+    @apply w-full;
+  }
+  .nav-link.active {
+    @apply text-white;
+  }
+
+  /* Gold shimmer effect */
+  .gold-shimmer {
+    background: linear-gradient(
+      90deg,
+      var(--color-gold) 0%,
+      var(--color-gold-light) 50%,
+      var(--color-gold) 100%
+    );
+    background-size: 200% 100%;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: shimmer 3s ease-in-out infinite;
+  }
+
+  @keyframes shimmer {
+    0% { background-position: -200% center; }
+    100% { background-position: 200% center; }
+  }
+}

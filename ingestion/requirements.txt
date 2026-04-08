@@ -1,0 +1,8 @@
+pdfplumber==0.11.4
+Pillow==10.4.0
+voyageai==0.3.2
+supabase==2.10.0
+python-dotenv==1.0.1
+tiktoken==0.8.0
+click==8.1.7
+rich==13.9.4

@@ -1,0 +1,23 @@
+{
+  "name": "khsbhof-platform",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Kentucky High School Basketball Hall of Fame Interactive Encyclopedia Platform",
+  "workspaces": [
+    "frontend",
+    "worker",
+    "embed"
+  ],
+  "scripts": {
+    "dev": "npm run dev --workspace=frontend",
+    "build": "npm run build --workspace=frontend",
+    "build:worker": "npm run build --workspace=worker",
+    "deploy:worker": "npm run deploy --workspace=worker",
+    "deploy:pages": "npm run deploy --workspace=frontend",
+    "lint": "npm run lint --workspace=frontend",
+    "type-check": "npm run type-check --workspace=frontend"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
