@@ -1,5 +1,4 @@
 import { Link } from 'react-router-dom'
-import { ChatWidget } from '../components/Chatbot/ChatWidget'
 
 const featuredSections = [
   {
@@ -125,19 +124,26 @@ export function HomePage() {
         </div>
       </section>
 
-      {/* Chatbot section */}
-      <section
-        id="chat-widget"
-        className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-16"
-      >
-        <div className="text-center mb-8">
+      {/* AI chatbot CTA — the floating chat button is always visible */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-16">
+        <div className="card p-8 text-center border-gold/20 bg-gradient-to-br from-gold/5 to-transparent">
+          <div className="w-12 h-12 rounded-full bg-gold/20 border border-gold/40 flex items-center justify-center mx-auto mb-4">
+            <svg className="w-6 h-6 text-gold" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M12 2C6.48 2 2 6.03 2 11c0 2.62 1.18 4.97 3.05 6.63L4 21l3.77-1.9C9.07 19.67 10.49 20 12 20c5.52 0 10-4.03 10-9S17.52 2 12 2z"/>
+            </svg>
+          </div>
           <p className="section-subtitle mb-2">AI-Powered Search</p>
-          <h2 className="section-title">Ask Anything</h2>
-          <p className="text-white/50 mt-3 max-w-xl mx-auto text-sm">
-            Our AI has read every page of the encyclopedia. Ask about players, games, seasons, records, and awards — it only answers from official encyclopedia content.
+          <h2 className="section-title text-3xl mb-3">Ask Anything</h2>
+          <p className="text-white/50 max-w-lg mx-auto text-sm mb-5">
+            Our AI has read every page of the encyclopedia. Ask about players, games, seasons, records, and awards — strictly sourced from official content, no speculation.
           </p>
+          <button
+            className="btn-primary"
+            onClick={() => window.dispatchEvent(new CustomEvent('khsbhof:ask', { detail: { question: '' } }))}
+          >
+            Open AI Chat →
+          </button>
         </div>
-        <ChatWidget />
       </section>
     </>
   )

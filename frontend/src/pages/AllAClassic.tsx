@@ -1,6 +1,5 @@
 import { Link } from 'react-router-dom'
 import { SEOHead } from '../components/Layout/SEOHead'
-import { ChatWidget } from '../components/Chatbot/ChatWidget'
 
 const jsonLd = {
   "@context": "https://schema.org",
@@ -57,14 +56,6 @@ export function AllAClassicPage() {
               <p className="text-white/50 text-sm">{item.desc}</p>
             </div>
           ))}
-        </div>
-
-        <div id="chat">
-          <div className="text-center mb-6">
-            <p className="section-subtitle mb-2">Ask the Encyclopedia</p>
-            <h2 className="font-serif text-2xl font-bold text-white">Invitational Questions?</h2>
-          </div>
-          <ChatWidget />
         </div>
       </div>
     </>

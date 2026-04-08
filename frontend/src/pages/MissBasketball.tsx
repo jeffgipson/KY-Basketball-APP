@@ -1,6 +1,5 @@
 import { Link } from 'react-router-dom'
 import { SEOHead } from '../components/Layout/SEOHead'
-import { ChatWidget } from '../components/Chatbot/ChatWidget'
 
 const jsonLd = {
   "@context": "https://schema.org",
@@ -50,14 +49,6 @@ export function MissBasketballPage() {
               Many Miss Basketball recipients went on to college All-American careers and professional basketball. The encyclopedia tracks the career paths of these exceptional athletes.
             </p>
           </div>
-        </div>
-
-        <div id="chat">
-          <div className="text-center mb-6">
-            <p className="section-subtitle mb-2">Ask the Encyclopedia</p>
-            <h2 className="font-serif text-2xl font-bold text-white">Miss Basketball Questions?</h2>
-          </div>
-          <ChatWidget />
         </div>
       </div>
     </>

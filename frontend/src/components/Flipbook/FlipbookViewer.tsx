@@ -4,12 +4,10 @@ import {
   useRef,
   useState,
 } from 'react'
-// page-flip is a CJS-only browser library — import via default to support SSR builds
-import pageFlipPkg from 'page-flip'
+// page-flip is CJS — Vite's optimizer exposes it as named exports in dev/client builds.
+// It is listed in ssr.external so it is skipped during SSG rendering.
+import { PageFlip } from 'page-flip'
 import type { SizeType } from 'page-flip'
-
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-const { PageFlip } = (pageFlipPkg as any).default ?? pageFlipPkg
 
 export interface TocEntry {
   label: string
