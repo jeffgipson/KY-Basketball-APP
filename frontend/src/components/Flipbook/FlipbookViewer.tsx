@@ -4,10 +4,18 @@ import {
   useRef,
   useState,
 } from 'react'
-// page-flip is CJS — Vite's optimizer exposes it as named exports in dev/client builds.
-// It is listed in ssr.external so it is skipped during SSG rendering.
-import { PageFlip } from 'page-flip'
-import type { SizeType } from 'page-flip'
+// page-flip is a CJS browser-only library. It is dynamically imported inside
+// useEffect so it is never evaluated during SSG/SSR (which runs in Node.js).
+
+// Minimal local type so the ref compiles without a static import of page-flip
+interface PageFlipInstance {
+  loadFromHTML(els: HTMLElement[]): void
+  flip(n: number): void
+  flipPrev(): void
+  flipNext(): void
+  on(event: string, cb: (e: { data: number }) => void): void
+  destroy(): void
+}
 
 export interface TocEntry {
   label: string
@@ -37,7 +45,7 @@ export function FlipbookViewer({
   onPageChange,
 }: FlipbookViewerProps) {
   const containerRef = useRef<HTMLDivElement>(null)
-  const flipbookRef = useRef<PageFlip | null>(null)
+  const flipbookRef = useRef<PageFlipInstance | null>(null)
   const [currentPage, setCurrentPage] = useState(1)
   const [inputPage, setInputPage] = useState('1')
   const [isFullscreen, setIsFullscreen] = useState(false)
@@ -55,9 +63,11 @@ export function FlipbookViewer({
     return () => window.removeEventListener('resize', check)
   }, [])
 
-  // Initialize PageFlip
+  // Initialize PageFlip — dynamic import keeps page-flip out of the SSR bundle
   useEffect(() => {
     if (!containerRef.current) return
+    let pf: PageFlipInstance | null = null
+    let destroyed = false
 
     const isPortrait = orientation === 'portrait'
     const width = isPortrait
@@ -65,27 +75,27 @@ export function FlipbookViewer({
       : Math.min((window.innerWidth - 64) / 2, 550)
     const height = Math.min(window.innerHeight * 0.75, 750)
 
-    const pf = new PageFlip(containerRef.current, {
-      width,
-      height,
-      size: 'fixed' as SizeType,
-      minWidth: 280,
-      maxWidth: 600,
-      minHeight: 400,
-      maxHeight: 800,
-      maxShadowOpacity: 0.5,
-      showCover: true,
-      mobileScrollSupport: false,
-      usePortrait: isPortrait,
-      autoSize: true,
-      drawShadow: true,
-      flippingTime: 700,
-    })
+    import('page-flip').then(({ PageFlip }) => {
+      if (destroyed || !containerRef.current) return
 
-    // Load pages as images
-    const pageEls = Array.from(
-      { length: totalPages },
-      (_, i) => {
+      pf = new PageFlip(containerRef.current, {
+        width,
+        height,
+        size: 'fixed' as 'fixed' | 'stretch',
+        minWidth: 280,
+        maxWidth: 600,
+        minHeight: 400,
+        maxHeight: 800,
+        maxShadowOpacity: 0.5,
+        showCover: true,
+        mobileScrollSupport: false,
+        usePortrait: isPortrait,
+        autoSize: true,
+        drawShadow: true,
+        flippingTime: 700,
+      })
+
+      const pageEls = Array.from({ length: totalPages }, (_, i) => {
         const div = document.createElement('div')
         div.className = 'page-img-wrapper'
         div.style.cssText = 'background:#0A1628;display:flex;align-items:center;justify-content:center;'
@@ -94,28 +104,26 @@ export function FlipbookViewer({
         img.alt = `Page ${i + 1}`
         img.style.cssText = 'width:100%;height:100%;object-fit:contain;'
         img.loading = 'lazy'
-        img.onload = () => {
-          if (i === 0) setIsLoading(false)
-        }
+        img.onload = () => { if (i === 0) setIsLoading(false) }
         div.appendChild(img)
         return div
-      }
-    )
+      })
 
-    pf.loadFromHTML(pageEls)
+      pf.loadFromHTML(pageEls)
+      pf.on('flip', (e: { data: number }) => {
+        const page = e.data + 1
+        setCurrentPage(page)
+        setInputPage(String(page))
+        onPageChange?.(page)
+      })
 
-    pf.on('flip', (e: { data: number }) => {
-      const page = e.data + 1
-      setCurrentPage(page)
-      setInputPage(String(page))
-      onPageChange?.(page)
+      flipbookRef.current = pf
+      setIsLoading(false)
     })
 
-    flipbookRef.current = pf
-    setIsLoading(false)
-
     return () => {
-      pf.destroy()
+      destroyed = true
+      pf?.destroy()
       flipbookRef.current = null
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps

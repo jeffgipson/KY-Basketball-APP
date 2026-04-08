@@ -2,10 +2,7 @@ name = "khsbhof-chat"
 main = "src/index.ts"
 compatibility_date = "2024-12-01"
 compatibility_flags = ["nodejs_compat"]
-
-# Worker limits
-[limits]
-cpu_ms = 50000
+account_id = "17d4a3ae8ca1de92dec6b3c6fd329844"
 
 # Environment: production
 [env.production]
